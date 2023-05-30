@@ -1,15 +1,17 @@
-import { ProviderRpcClient } from 'everscale-inpage-provider';
-import { EverscaleStandaloneClient } from 'everscale-standalone-client';
-import { useEffect, useState } from 'react';
-import { VenomConnect } from 'venom-connect';
+import { ProviderRpcClient } from "everscale-inpage-provider";
+import { EverscaleStandaloneClient } from "everscale-standalone-client";
+import { useEffect, useState } from "react";
+import { VenomConnect } from "venom-connect";
 
-const initTheme = 'light' as const;
+const initTheme = "light" as const;
 
 const useVenomConnect = () => {
   const [venomConnect, setVenomConnect] = useState<any>();
   const [venomProvider, setVenomProvider] = useState<any>();
   const [address, setAddress] = useState();
+  // @ts-ignore
   const [balance, setBalance] = useState();
+  // @ts-ignore
   const [standaloneMethodsIsFetching, setStandaloneMethodsIsFetching] =
     useState(false);
 
@@ -17,10 +19,10 @@ const useVenomConnect = () => {
     EverscaleStandaloneClient.create({
       connection: {
         id: 1000,
-        group: 'venom_testnet',
-        type: 'jrpc',
+        group: "venom_testnet",
+        type: "jrpc",
         data: {
-          endpoint: 'https://jrpc.venom.foundation/rpc',
+          endpoint: "https://jrpc.venom.foundation/rpc",
         },
       },
     });
@@ -72,7 +74,7 @@ const useVenomConnect = () => {
               package: ProviderRpcClient,
               packageOptions: {
                 fallback:
-                  VenomConnect.getPromise('venomwallet', 'extension') ||
+                  VenomConnect.getPromise("venomwallet", "extension") ||
                   (() => Promise.reject()),
                 forceUseFallback: true,
               },
@@ -82,8 +84,8 @@ const useVenomConnect = () => {
               },
 
               // Setup
-              id: 'extension',
-              type: 'extension',
+              id: "extension",
+              type: "extension",
 
               // name: "Custom Name",
               // logo: "",
@@ -96,9 +98,9 @@ const useVenomConnect = () => {
           ],
           defaultWalletWaysToConnect: [
             // List of enabled options
-            'mobile',
-            'ios',
-            'android',
+            "mobile",
+            "ios",
+            "android",
           ],
         },
         //
@@ -197,7 +199,7 @@ const useVenomConnect = () => {
   };
 
   useEffect(() => {
-    const off = venomConnect?.on('connect', onConnect);
+    const off = venomConnect?.on("connect", onConnect);
 
     return () => {
       off?.();

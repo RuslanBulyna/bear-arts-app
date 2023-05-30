@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-import Label from '@/components/Label';
-import useVenomConnect from '@/hooks/useVenomConnect';
+import Label from "@/components/Label";
+import useVenomConnect from "@/hooks/useVenomConnect";
 
 type IHeaderLink = {
   name: string;
@@ -15,10 +15,11 @@ type IHeaderLink = {
 };
 
 type IHeaderProps = {
-  [linksList: string]: IHeaderLink | undefined;
+  linksList: IHeaderLink[];
+  // @ts-ignore
   // eslint-disable-next-line react/no-unused-prop-types
   className?: string | undefined;
-}
+};
 
 const ConnectBtn = () => {
   const {
@@ -62,34 +63,34 @@ const NavMenu = (props: IHeaderProps) => {
   return (
     <nav className={`${className}`}>
       <ul className="flex flex-col lg:flex-row lg:space-x-8">
-        {linksList?.map((link: IHeaderLink, key) => {
+        {linksList?.map((link: IHeaderLink, index) => {
           return (
             <li
-              key={key}
+              key={`header:${index}`}
               className={`flex items-center gap-3 ${
-                link.hasModal ? 'has-popup ' : ''
+                link.hasModal ? "has-popup " : ""
               }`}
             >
               <Link
                 style={{
-                  opacity: !link.isBeta ? '1' : '0.5',
-                  textDecoration: link.isBeta ? 'none' : 'inhherit',
-                  cursor: !link.isBeta ? 'pointer' : 'default',
+                  opacity: !link.isBeta ? "1" : "0.5",
+                  textDecoration: link.isBeta ? "none" : "inhherit",
+                  cursor: !link.isBeta ? "pointer" : "default",
                 }}
                 href={!link.isBeta ? link.url : {}}
                 className={`focus-visible:ring-ring ring-offset-background text-primary text-md inline-flex h-10 items-center justify-center rounded-lg p-0 font-medium underline-offset-4 transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${+(link.isBeta
-                  ? 'disabled:pointer-events-none disabled:opacity-50 '
-                  : '')}`}
+                  ? "disabled:pointer-events-none disabled:opacity-50 "
+                  : "")}`}
               >
                 {link.name}
               </Link>
-              {link.isBeta ? <Label text="BETA" /> : ''}
+              {link.isBeta ? <Label text="BETA" /> : ""}
               {link.hasModal ? (
                 <span className="popup bg-secondary rounded-md p-4">
                   {link.modal?.text}
                 </span>
               ) : (
-                ''
+                ""
               )}
             </li>
           );
@@ -125,13 +126,13 @@ const HeaderLg = (props: IHeaderProps) => {
 
 const HeaderMdSm = (props: IHeaderProps) => {
   const { linksList } = props;
-  const [isOpen, setIsOpen] = useState<string | undefined>('hidden');
+  const [isOpen, setIsOpen] = useState<string | undefined>("hidden");
 
   const showMobileMenuHandler = () => {
-    if (isOpen === 'hidden') {
-      setIsOpen('false');
+    if (isOpen === "hidden") {
+      setIsOpen("false");
     } else {
-      setIsOpen('hidden');
+      setIsOpen("hidden");
     }
   };
 
@@ -142,10 +143,11 @@ const HeaderMdSm = (props: IHeaderProps) => {
           <div className="flex items-center justify-between">
             <div className="flex gap-5">
               <button
+                type="button"
                 aria-label="Toggle mobile menu"
                 onClick={showMobileMenuHandler}
               >
-                {isOpen === 'hidden' ? (
+                {isOpen === "hidden" ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -193,7 +195,7 @@ const HeaderMdSm = (props: IHeaderProps) => {
             </nav>
           </div>
           <NavMenu
-            className={'mobile-header ' + `${isOpen}`}
+            className={`mobile-header ${isOpen}`}
             linksList={linksList}
           />
         </div>

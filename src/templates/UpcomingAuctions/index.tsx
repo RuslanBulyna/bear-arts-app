@@ -1,8 +1,9 @@
-import AuctionCard from '@/components/AuctionCard';
-import nft_img_1 from 'public/assets/images/nft_img_1.png';
-import nft_img_2 from 'public/assets/images/nft_img_2.png';
-import nft_img_3 from 'public/assets/images/nft_img_3.png';
-import nft_img_4 from 'public/assets/images/nft_img_4.png';
+import nft_img_1 from "public/assets/images/nft_img_1.png";
+import nft_img_2 from "public/assets/images/nft_img_2.png";
+import nft_img_3 from "public/assets/images/nft_img_3.png";
+import nft_img_4 from "public/assets/images/nft_img_4.png";
+
+import AuctionCard from "@/components/AuctionCard";
 
 const UpcomingAuctions = () => {
   return (

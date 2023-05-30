@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-const getReturnValues = (countDown) => {
+import { ICountdown } from "@/types/Countdown";
+
+const getReturnValues = (countDown: number) => {
   // calculate time left
   const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
   const hours = Math.floor(
@@ -12,7 +14,8 @@ const getReturnValues = (countDown) => {
   return [days, hours, minutes, seconds];
 };
 
-const useCountdown = (targetDate) => {
+const useCountdown = (props: ICountdown) => {
+  const { targetDate } = props;
   const countDownDate = new Date(targetDate).getTime();
 
   const [countDown, setCountDown] = useState(

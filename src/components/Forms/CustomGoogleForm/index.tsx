@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState } from "react";
 
 const CustomGoogleForm = () => {
-  const [email, setEmail] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
   const [isSended, setIsSended] = useState<boolean>(false);
 
@@ -18,14 +18,14 @@ const CustomGoogleForm = () => {
           `https://docs.google.com/forms/d/e/1FAIpQLSd3zha5Z6os00OS75QNHry6P4ZH2UvLtlNTepirsB0FlNOoDA/formResponse?${new URLSearchParams(
             {
               emailAddress: email,
-              submit: 'Submit',
+              submit: "Submit",
             }
           )}`,
           {
-            method: 'POST',
-            mode: 'no-cors',
+            method: "POST",
+            mode: "no-cors",
             headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
+              "Content-Type": "application/x-www-form-urlencoded",
             },
           }
         );
@@ -39,7 +39,7 @@ const CustomGoogleForm = () => {
         setError(true);
       }
     } catch (e) {
-      console.log(e);
+      console.log("GoogleFormError:", e);
     }
   }, [email, error, setError, setIsSended]);
 
@@ -64,7 +64,7 @@ const CustomGoogleForm = () => {
             &nbsp;&nbsp;Email is not corrected
           </span>
         ) : (
-          ''
+          ""
         )}
       </div>
       {isSended ? (
@@ -75,7 +75,7 @@ const CustomGoogleForm = () => {
           <p className="text-sm">Email successfully sended</p>
         </div>
       ) : (
-        ''
+        ""
       )}
       <button
         type="button"

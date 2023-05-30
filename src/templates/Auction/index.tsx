@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import Image from 'next/image';
-import nft_drake from 'public/assets/images/nft_drake.png';
+import Image from "next/image";
+import nft_drake from "public/assets/images/nft_drake.png";
+import { useState } from "react";
 
-import Countdown from '@/components/Countdown';
-
-type AuctionProps = {
-  image: string;
-};
+import Countdown from "@/components/Countdown";
 
 const Auction = () => {
-  const [isClaimDisabled, setIsClaimDisabled] = useState<boolean | undefined>(true);
+  // eslint-disable-next-line unused-imports/no-unused-vars
+  // @ts-ignore
+  const [isClaimDisabled, setIsClaimDisabled] = useState<boolean | undefined>(
+    true
+  );
 
   const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
@@ -106,12 +106,20 @@ const Auction = () => {
                 min="100"
                 value="100"
               />
-              <button className="focus-visible:ring-ring ring-offset-background text-primary-foreground inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-400 px-8 text-lg font-bold text-white transition-colors hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
+              <button
+                type="button"
+                className="focus-visible:ring-ring ring-offset-background text-primary-foreground inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-400 px-8 text-lg font-bold text-white transition-colors hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              >
                 BID
               </button>
               <button
+                type="button"
                 disabled={isClaimDisabled}
-                className="`${isClaimDisabled ? disabled:pointer-events-none disabled:opacity-50 : ''}` focus-visible:ring-ring ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 w-full items-center justify-center rounded-xl px-8 text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                className={`${
+                  isClaimDisabled
+                    ? "disabled:pointer-events-none disabled:opacity-50"
+                    : ""
+                } focus-visible:ring-ring ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-11 w-full items-center justify-center rounded-xl px-8 text-lg font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2`}
               >
                 CLAIM
               </button>
@@ -127,7 +135,7 @@ const Auction = () => {
               </span>
             </h2>
             <h2 className="text-2xl font-bold">
-              Remaining{' '}
+              Remaining{" "}
               <span className="rounded bg-black p-2 text-white">15245</span>
             </h2>
           </div>

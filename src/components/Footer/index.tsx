@@ -1,4 +1,4 @@
-import CustomGoogleForm from '@/components/Forms/CustomGoogleForm';
+import CustomGoogleForm from "@/components/Forms/CustomGoogleForm";
 
 const Footer = () => {
   return (
@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="container grid gap-10 px-5 md:grid-cols-2">
         <div>
           <h3 className="mb-3 font-bold">Stay Connected</h3>
-            <CustomGoogleForm />
+          <CustomGoogleForm />
         </div>
         <div className="md:text-right">
           <h3 className="mb-2 font-bold">Links</h3>

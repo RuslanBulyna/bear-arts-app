@@ -1,11 +1,13 @@
 {
   // Configuration for JavaScript files
   "extends": [
+    "next",
     "airbnb-base",
     "next/core-web-vitals", // Needed to avoid warning in next.js build: 'The Next.js plugin was not detected in your ESLint configuration'
     "plugin:prettier/recommended"
   ],
   "rules": {
+    "quotes": 0,
     "prettier/prettier": [
       "error",
       {
@@ -40,10 +42,12 @@
         "prettier/prettier": [
           "error",
           {
-            "singleQuote": true,
+            "singleQuote": false,
             "endOfLine": "auto"
           }
         ],
+        "react/no-unescaped-entities": "off",
+        "@next/next/no-page-custom-font": "off",
         "react/function-component-definition": "off", // Disable Airbnb's specific function type
         "react/destructuring-assignment": "off", // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
         "react/require-default-props": "off", // Allow non-defined react props as undefined
@@ -61,11 +65,16 @@
         "simple-import-sort/imports": "error", // Import configuration for `eslint-plugin-simple-import-sort`
         "simple-import-sort/exports": "error", // Export configuration for `eslint-plugin-simple-import-sort`
         "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/naming-convention": "off",
         "unused-imports/no-unused-imports": "error",
-        "unused-imports/no-unused-vars": [
-          "error",
-          { "argsIgnorePattern": "^_" }
-        ]
+        "no-underscore-dangle": "off",
+        "unused-imports/no-unused-vars": "off",
+        "tailwindcss/no-custom-classname": "off",
+        "tailwindcss/no-contradicting-classname": "off",
+        "jsx-a11y/label-has-associated-control": "off",
+        "@next/next/no-document-import-in-page": "off",
+        "@typescript-eslint/no-shadow": "off",
+        "react/no-array-index-key": "off"
       }
     },
     // Configuration for testing

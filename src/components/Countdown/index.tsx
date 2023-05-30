@@ -1,5 +1,6 @@
-import DateTimeDisplay from '@/components/DateTimeDisplay';
-import { useCountdown } from '@/hooks/useCountdown';
+import DateTimeDisplay from "@/components/DateTimeDisplay";
+import { useCountdown } from "@/hooks/useCountdown";
+import { ICountdown, ICounter } from "@/types/Countdown";
 
 const ExpiredNotice = () => {
   return (
@@ -10,10 +11,12 @@ const ExpiredNotice = () => {
   );
 };
 
-const ShowCounter = ({ days, hours, minutes, seconds }) => {
+const ShowCounter = (props: ICounter) => {
+  const { days, hours, minutes, seconds } = props;
+
   return (
     <div className="flex">
-      <DateTimeDisplay value={days} type="Days" isDanger={days <= 3} />
+      <DateTimeDisplay value={days} type="Days" isDanger={Number(days) <= 3} />
       <DateTimeDisplay value={hours} type="Hours" isDanger={false} />
       <DateTimeDisplay value={minutes} type="Mins" isDanger={false} />
       <DateTimeDisplay value={seconds} type="Seconds" isDanger={false} />
@@ -21,18 +24,22 @@ const ShowCounter = ({ days, hours, minutes, seconds }) => {
   );
 };
 
-const Countdown = ({ targetDate }) => {
-  const [days, hours, minutes, seconds] = useCountdown(targetDate);
+const Countdown = (props: ICountdown) => {
+  const { targetDate } = props;
+  const [days, hours, minutes, seconds] = useCountdown({
+    targetDate,
+  });
 
+  // @ts-ignore
   if (days + hours + minutes + seconds <= 0) {
     return <ExpiredNotice />;
   }
   return (
     <ShowCounter
-      days={days}
-      hours={hours}
-      minutes={minutes}
-      seconds={seconds}
+      days={days?.toString()}
+      hours={hours?.toString()}
+      minutes={minutes?.toString()}
+      seconds={seconds?.toString()}
     />
   );
 };
