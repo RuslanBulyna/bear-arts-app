@@ -1,6 +1,6 @@
 {
-  "name": "next-js-boilerplate",
-  "version": "3.10.0",
+  "name": "bear-arts-app",
+  "version": "0.0.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -27,11 +27,16 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
+    "browserslist": "^4.6.3",
+    "everscale-inpage-provider": "^0.3.61",
+    "everscale-standalone-client": "^2.1.19",
     "next": "^13.4.1",
     "next-seo": "^6.0.0",
     "next-sitemap": "^4.0.9",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "venom-connect": "^1.0.20",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
@@ -120,5 +125,10 @@
       "@semantic-release/github"
     ]
   },
-  "author": "Ixartz (https://github.com/ixartz)"
+  "author": "RuslanBulyna",
+  "browserslist": [
+    ">0.2%",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

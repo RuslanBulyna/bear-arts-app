@@ -9,7 +9,7 @@
     "prettier/prettier": [
       "error",
       {
-        "singleQuote": true,
+        "singleQuote": false,
         "endOfLine": "auto"
       }
     ]
@@ -33,7 +33,8 @@
         "plugin:prettier/recommended"
       ],
       "parserOptions": {
-        "project": "./tsconfig.json"
+        "project": "tsconfig.json",
+        "tsconfigRootDir": "./"
       },
       "rules": {
         "prettier/prettier": [
@@ -50,7 +51,6 @@
         "react-hooks/exhaustive-deps": "off", // Incorrectly report needed dependency with Next.js router
         "@next/next/no-img-element": "off", // We currently not using next/image because it isn't supported with SSG mode
         "@typescript-eslint/comma-dangle": "off", // Avoid conflict rule between Eslint and Prettier
-        "@typescript-eslint/consistent-type-imports": "error", // Ensure `import type` is used when it's necessary
         "no-restricted-syntax": [
           "error",
           "ForInStatement",
