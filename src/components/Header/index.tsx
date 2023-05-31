@@ -2,7 +2,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import Label from "@/components/Label";
+import useMediaQuery from "@/hooks/useMediaHook";
 import useVenomConnect from "@/hooks/useVenomConnect";
+import { IMediaQuery } from "@/types/IMediaQuery";
 
 type IHeaderLink = {
   name: string;
@@ -205,12 +207,12 @@ const HeaderMdSm = (props: IHeaderProps) => {
 };
 
 const Header = (props: IHeaderProps) => {
-  return (
-    <>
-      <HeaderLg {...props} />
-      <HeaderMdSm {...props} />
-    </>
-  );
+  // @ts-ignore
+  const isMobile = useMediaQuery<IMediaQuery>({
+    width: 1024,
+  });
+
+  return !isMobile ? <HeaderLg {...props} /> : <HeaderMdSm {...props} />;
 };
 
 export default Header;
