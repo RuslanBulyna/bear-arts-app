@@ -11,17 +11,17 @@ const Auction = () => {
     true
   );
 
-  const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
+  const DAYS_IN_MS = 20 * 24 * 60 * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
 
-  const dateTimeAfterThreeDays = NOW_IN_MS + THREE_DAYS_IN_MS;
+  const dateTimeAfterThreeDays = NOW_IN_MS + DAYS_IN_MS;
 
   return (
     <div id="auction" className="pt-32 text-slate-800">
       <div className="container px-5">
         <div className="grid gap-10 lg:grid-cols-3">
           <div>
-            <h2 className="text-3xl font-bold">About VENOM BEARS</h2>
+            <h2 className="text-3xl font-bold">VENOM BEARS</h2>
             <div className="mt-3 flex gap-3">
               <div className="focus:ring-ring bg-secondary hover:bg-secondary/80 text-secondary-foreground inline-flex items-center rounded-full border border-transparent px-2.5 py-0.5 text-sm font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2">
                 Art
@@ -99,12 +99,13 @@ const Auction = () => {
           <div className="self-center text-center">
             <div className="grid w-full items-center gap-5">
               <h3 className="text-2xl font-bold">Current Bid: 1 Venom</h3>
+              <h6 className="text-1xl">
+                Your bid must be greater than the current bid to claim.
+              </h6>
               <input
                 type="number"
                 className="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border bg-white p-6 text-lg file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 id="bid"
-                min="100"
-                value="100"
               />
               <button
                 type="button"

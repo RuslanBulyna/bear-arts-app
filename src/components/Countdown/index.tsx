@@ -16,7 +16,7 @@ const ShowCounter = (props: ICounter) => {
 
   return (
     <div className="flex">
-      <DateTimeDisplay value={days} type="Days" isDanger={Number(days) <= 3} />
+      <DateTimeDisplay value={days} type="Days" isDanger={Number(days) <= 20} />
       <DateTimeDisplay value={hours} type="Hours" isDanger={false} />
       <DateTimeDisplay value={minutes} type="Mins" isDanger={false} />
       <DateTimeDisplay value={seconds} type="Seconds" isDanger={false} />
