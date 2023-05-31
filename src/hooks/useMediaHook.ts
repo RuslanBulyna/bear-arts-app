@@ -5,6 +5,7 @@ import { IMediaQuery } from "@/types/IMediaQuery";
 const useMediaQuery = ({ width }: IMediaQuery) => {
   const [targetReached, setTargetReached] = useState(false);
 
+  // @ts-ignore
   const updateTarget = useCallback((e) => {
     if (e.matches) {
       setTargetReached(true);
