@@ -34,12 +34,9 @@ const Auction = () => {
               </div>
             </div>
             <p className="mb-5 mt-10 text-2xl">
-              One of the first collections on the Venom Blockchain, created to
-              attract more talents and make 1/1 arts great again.
-            </p>
-            <p className="mb-10 text-2xl">
-              With the new Bear Arts platform, the team will make it possible to
-              showcase the world's masterpieces by any artist.
+              Venom Bears is the first collection on the Venom Blockchain. With
+              its new Bear Arts platform, artists have enormous opportunities to
+              showcase their masterpieces to the world.
             </p>
             <p className="mb-10 text-2xl">
               Participation in the Venom Auction testnet grants users a
