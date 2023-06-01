@@ -33,12 +33,12 @@ const Auction = () => {
                 Mutable
               </div>
             </div>
-            <p className="mb-5 mt-10 text-2xl">
+            <p className="mb-5 mt-10 text-xl">
               Venom Bears is the first collection on the Venom Blockchain. With
               its new Bear Arts platform, artists have enormous opportunities to
               showcase their masterpieces to the world.
             </p>
-            <p className="mb-10 text-2xl">
+            <p className="mb-10 text-xl">
               Participation in the Venom Auction testnet grants users a
               whitelist spot in future "Venom Bears" collection.
             </p>
