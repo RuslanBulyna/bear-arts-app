@@ -7,12 +7,14 @@ const DateTimeDisplay = (props: IDateTimeProps) => {
 
   return (
     <div
-      className={`${isDanger ? "countdown danger" : "countdown"} flex flex-col`}
+      className={`${
+        isDanger ? "countdown danger" : "countdown"
+      } flex flex-col max-[430px]:px-2`}
     >
-      <span className="rounded bg-black px-5 py-2 text-3xl font-bold text-white">
+      <span className="rounded bg-black px-5 py-2 text-3xl font-bold text-white max-[430px]:px-4 max-[430px]:py-2 max-[430px]:text-2xl">
         {value}
       </span>
-      <span className="uppercase">{type}</span>
+      <span className="uppercase max-[430px]:text-sm">{type}</span>
     </div>
   );
 };

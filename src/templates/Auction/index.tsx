@@ -121,22 +121,24 @@ const Auction = () => {
               >
                 CLAIM
               </button>
+              <div className="flex justify-between max-[430px]:flex-col max-[430px]:gap-y-5">
+                <h2 className="text-lg font-bold">
+                  <span>Edition of</span>
+                  <span className="ml-3 rounded bg-black p-2 text-white">
+                    33333
+                  </span>
+                </h2>
+                <h2 className="text-lg font-bold">
+                  <span>Remaining</span>
+                  <span className="ml-3 rounded bg-black p-2 text-white">
+                    15245
+                  </span>
+                </h2>
+              </div>
             </div>
           </div>
         </div>
         <div className="mt-10 flex flex-col items-center justify-center gap-6 text-center sm:flex-row sm:gap-20">
-          <div className="space-y-5">
-            <h2 className="text-2xl font-bold">
-              Edition of
-              <span className="ml-3 rounded bg-black p-2 text-white">
-                33333
-              </span>
-            </h2>
-            <h2 className="text-2xl font-bold">
-              Remaining{" "}
-              <span className="rounded bg-black p-2 text-white">15245</span>
-            </h2>
-          </div>
           <div className="text-center">
             <Countdown targetDate={dateTimeAfterThreeDays} />
           </div>
