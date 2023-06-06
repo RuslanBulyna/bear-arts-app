@@ -1,10 +1,44 @@
+import { Address, ProviderRpcClient } from "everscale-inpage-provider";
 import Image from "next/image";
-import nft_drake from "public/assets/images/nft_drake.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+// Do not forget about ABI. We need it to call our smart contracts!
+import auctionAbi from "@/abi/Auction.abi.json";
+import nftAbi from "@/abi/NFT.abi.json";
+import tokenWalletAbi from "@/abi/TokenWallet.abi.json";
 import Countdown from "@/components/Countdown";
+// Store it somwhere....for example in separate files for constants
+import { AUCTION_ADDRESS } from "@/utils/constants";
+import {
+  BaseNftJson,
+  formatBalance,
+  formatDate,
+  getValueForSend,
+} from "@/utils/helpers";
 
-const Auction = () => {
+type AuctionProps = {
+  address: string | undefined;
+  balance: string | undefined;
+  standaloneProvider: ProviderRpcClient | undefined;
+  venomProvider: ProviderRpcClient | undefined;
+  tokenWalletAddress: string | undefined;
+  checkBalance: () => void;
+};
+
+type NftAnswer = {
+  _nft: Address;
+};
+/* tslint:disable */
+const Auction = (props: AuctionProps) => {
+  const {
+    address,
+    balance,
+    standaloneProvider,
+    venomProvider,
+    tokenWalletAddress,
+    checkBalance,
+  } = props;
+
   // eslint-disable-next-line unused-imports/no-unused-vars
   // @ts-ignore
   const [isClaimDisabled, setIsClaimDisabled] = useState<boolean | undefined>(
@@ -15,6 +49,152 @@ const Auction = () => {
   const NOW_IN_MS = new Date().getTime();
 
   const dateTimeAfterThreeDays = NOW_IN_MS + DAYS_IN_MS;
+
+  const auctionContract = standaloneProvider
+    ? new standaloneProvider.Contract(auctionAbi, new Address(AUCTION_ADDRESS))
+    : undefined;
+  // Some state variables from Auction smart contract. You can just check ABI.
+  const [nftUrl, setNftUrl] = useState<string | undefined>();
+  const [currenBid, setCurrentBid] = useState<string | undefined>();
+  const [currentWinner, setCurrentWinner] = useState<string | undefined>();
+  const [endTime, setEndTime] = useState<string | undefined>();
+  const [needUpdate, setNeedUpdate] = useState(false);
+  const [tokenAmount, setTokenAmount] = useState<number | undefined>(0);
+
+  const getNftAddress = async (): Promise<Address | undefined> => {
+    if (!auctionContract) return undefined;
+    // @ts-ignore
+    const answer = (await auctionContract.methods
+      ._nft({} as never)
+      .call()) as NftAnswer;
+    if (!answer) return undefined;
+    return answer._nft;
+  };
+
+  // we need to read the NFT contract here to get NFT itself (NFT data json)
+  const getNftUrl = async (
+    provider: ProviderRpcClient,
+    nftAddress: Address
+  ): Promise<string> => {
+    const nftContract = new provider.Contract(nftAbi, nftAddress);
+    // @ts-ignore
+    const result = (await nftContract.methods
+      .getJson({ answerId: 0 } as never)
+      .call()) as { json: string };
+    const json = JSON.parse(result.json ?? "{}") as BaseNftJson;
+    return json.preview?.source || "";
+  };
+
+  // loadNFT - get NFT address from Auction contract and get data from NFT contract
+  const loadNft = async (provider: ProviderRpcClient) => {
+    const nftAddress = await getNftAddress();
+    if (!nftAddress) return;
+    const _nftUrl = await getNftUrl(provider, nftAddress);
+    if (!_nftUrl) return;
+    setNftUrl(_nftUrl);
+  };
+
+  const getCurrentBid = async (): Promise<string | undefined> => {
+    if (!auctionContract) return undefined;
+    // @ts-ignore
+    const { _currentBid } = await auctionContract.methods
+      ._currentBid({} as never)
+      .call();
+    return formatBalance(_currentBid) || "0";
+  };
+
+  const getCurrentWinner = async (): Promise<string | undefined> => {
+    if (!auctionContract) return undefined;
+    // @ts-ignore
+    const result = (await auctionContract.methods
+      ._currentWinner({} as never)
+      .call()) as any;
+    return result._currentWinner._address;
+  };
+
+  const getEndTime = async (): Promise<string | undefined> => {
+    if (!auctionContract) return undefined;
+    // @ts-ignore
+    const { _endTime } = await auctionContract.methods
+      ._endTime({} as never)
+      .call();
+    return formatDate(_endTime);
+  };
+
+  // Bring it all together :) We need it for hook
+  const loadAuctionInfo = async (provider: ProviderRpcClient) => {
+    try {
+      await loadNft(provider);
+      const _currentBid = await getCurrentBid();
+      setCurrentBid(_currentBid);
+      const _currentWinner = await getCurrentWinner();
+      setCurrentWinner(_currentWinner);
+      const _endTime = await getEndTime();
+      setEndTime(_endTime);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const updateData = async () => {
+    await checkBalance();
+    const _currentBid = await getCurrentBid();
+    setCurrentBid(_currentBid);
+    const _currentWinner = await getCurrentWinner();
+    setCurrentWinner(_currentWinner);
+    setNeedUpdate(false);
+  };
+
+  const onChangeAmount = (e: string) => {
+    if (e === "") setTokenAmount(undefined);
+    if (Number(e) <= Number(balance)) setTokenAmount(Number(e));
+  };
+
+  // main function of all dAPP! :)
+  const bet = async () => {
+    try {
+      if (!venomProvider || !tokenAmount) return;
+      // TokenWallet address was passed here from somewhere (from NftAuction component)
+      const tokenWalletContract = new venomProvider.Contract(
+        tokenWalletAbi,
+        new Address(tokenWalletAddress as string)
+      );
+      // Just a common call of smart contract, nothing special and pretty easy
+      // The only one difference - usage of .send() function
+      // When we use send(), firstly we call our venom wallet (logged user's wallet) and then venom wallet will call our target contract internally (by sendTransaction method)
+      // So you need to call send() when you own callee internally (by wallet address)
+      // @ts-ignore
+      const result = await tokenWalletContract.methods
+        .transfer({
+          amount: getValueForSend(tokenAmount),
+          recipient: new Address(AUCTION_ADDRESS),
+          deployWalletValue: 0,
+          remainingGasTo: new Address(address as string),
+          notify: true,
+          payload: "",
+        } as never)
+        .send({
+          from: new Address(address as string),
+          amount: getValueForSend(1),
+          bounce: true,
+        });
+      if (result?.id?.lt && result?.endStatus === "active") {
+        // when our tx is success we need to refresh parent component with new data
+        setNeedUpdate(true);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Main hooks for loading and updating our info
+  useEffect(() => {
+    if (standaloneProvider) loadAuctionInfo(standaloneProvider);
+  }, [standaloneProvider]);
+
+  useEffect(() => {
+    if (needUpdate && standaloneProvider) updateData();
+  }, [needUpdate]);
 
   return (
     <div id="auction" className="pt-32 text-slate-800">
@@ -86,16 +266,22 @@ const Auction = () => {
               </a>
             </div>
           </div>
-          <Image
-            src={nft_drake}
-            alt="polar"
-            width="400"
-            height="400"
-            className="w-full"
-          />
+          {nftUrl ? (
+            <Image
+              src={nftUrl}
+              alt="polar_nft"
+              width="400"
+              height="400"
+              className="w-full"
+            />
+          ) : (
+            <div />
+          )}
           <div className="self-center text-center">
             <div className="grid w-full items-center gap-5">
-              <h3 className="text-2xl font-bold">Current Bid: 1 Venom</h3>
+              <h3 className="text-2xl font-bold">
+                Current Bid: {currenBid && <b>{currenBid} Venom</b>}
+              </h3>
               <h6 className="text-1xl">
                 Your bid must be greater than the current bid to claim.
               </h6>
@@ -103,10 +289,18 @@ const Auction = () => {
                 type="number"
                 className="border-input ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border bg-white p-6 text-lg file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 id="bid"
+                min={0}
+                value={tokenAmount !== undefined ? tokenAmount : ""}
+                onChange={(e) => {
+                  onChangeAmount(e.target.value);
+                }}
               />
               <button
                 type="button"
-                className="focus-visible:ring-ring ring-offset-background text-primary-foreground inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-400 px-8 text-lg font-bold text-white transition-colors hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                className={`${
+                  !tokenAmount ? "btn disabled" : "btn"
+                } focus-visible:ring-ring ring-offset-background text-primary-foreground inline-flex h-11 w-full items-center justify-center rounded-xl bg-emerald-400 px-8 text-lg font-bold text-white transition-colors hover:bg-emerald-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`}
+                onClick={bet}
               >
                 BID
               </button>
@@ -121,11 +315,13 @@ const Auction = () => {
               >
                 CLAIM
               </button>
+              {currentWinner && <p id="copyText">{currentWinner}</p>}
               <div className="flex justify-between max-[430px]:flex-col max-[430px]:gap-y-5">
                 <h2 className="text-lg font-bold">
                   <span>Edition of</span>
                   <span className="ml-3 rounded bg-black p-2 text-white">
                     33333
+                    {endTime && <b>{endTime} UTC</b>}
                   </span>
                 </h2>
                 <h2 className="text-lg font-bold">

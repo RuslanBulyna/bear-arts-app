@@ -1,14 +1,20 @@
-import Auction from "@/templates/Auction";
+import React, { useEffect, useState } from "react";
+import { VenomConnect } from "venom-connect";
+
 import { Main } from "@/templates/Main/Main";
-import UpcomingAuctions from "@/templates/UpcomingAuctions";
+import { initVenomConnect } from "@/venom-connect/configure";
 
 const Index = () => {
-  return (
-    <Main>
-      <Auction />
-      <UpcomingAuctions />
-    </Main>
-  );
+  const [venomConnect, setVenomConnect] = useState<VenomConnect | undefined>();
+  const init = async () => {
+    const _venomConnect = await initVenomConnect();
+    setVenomConnect(_venomConnect);
+  };
+  useEffect(() => {
+    init();
+  }, []);
+
+  return <Main venomConnect={venomConnect} />;
 };
 
 export default Index;

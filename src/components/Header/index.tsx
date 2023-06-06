@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Label from "@/components/Label";
 import useMediaQuery from "@/hooks/useMediaHook";
-import useVenomConnect from "@/hooks/useVenomConnect";
 import { IMediaQuery } from "@/types/IMediaQuery";
 
 type IHeaderLink = {
@@ -17,50 +16,37 @@ type IHeaderLink = {
 };
 
 type IHeaderProps = {
+  address: string | undefined;
+  onLogin: () => {};
+  onDisconnect: () => {};
   linksList: IHeaderLink[];
   // @ts-ignore
   // eslint-disable-next-line react/no-unused-prop-types
   className?: string | undefined;
 };
 
-const ConnectBtn = () => {
-  const {
-    venomConnect,
-    address,
-    onInitButtonClick,
-    onConnectButtonClick,
-    onDisconnectButtonClick,
-  } = useVenomConnect();
+type IConnectBtn = {
+  btnText: string;
+  onClick: () => {};
+};
 
-  useEffect(() => {
-    onInitButtonClick();
-  }, []);
+const ConnectBtn = (props: IConnectBtn) => {
+  const { btnText, onClick } = props;
 
   return (
-    <>
-      {venomConnect && !address && (
-        <button
-          type="button"
-          className="focus-visible:ring-ring ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-          onClick={onConnectButtonClick}
-        >
-          Connect
-        </button>
-      )}
-      {venomConnect && !!address && (
-        <button
-          type="button"
-          className="focus-visible:ring-ring ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-          onClick={onDisconnectButtonClick}
-        >
-          Disconnect
-        </button>
-      )}
-    </>
+    <button
+      type="button"
+      className="focus-visible:ring-ring ring-offset-background bg-primary text-primary-foreground hover:bg-primary/90 inline-flex h-10 items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+      onClick={onClick}
+    >
+      {btnText}
+    </button>
   );
 };
 
-const NavMenu = (props: IHeaderProps) => {
+const NavMenu = (
+  props: Omit<IHeaderProps, "address" | "onLogin" | "onDisconnect">
+) => {
   const { linksList, className } = props;
   return (
     <nav className={`${className}`}>
@@ -103,7 +89,7 @@ const NavMenu = (props: IHeaderProps) => {
 };
 
 const HeaderLg = (props: IHeaderProps) => {
-  const { linksList } = props;
+  const { address, onLogin, onDisconnect, linksList } = props;
 
   return (
     <header className="sticky top-0 z-10 hidden w-full bg-white py-5 lg:block">
@@ -117,7 +103,15 @@ const HeaderLg = (props: IHeaderProps) => {
         <nav>
           <ul className="flex flex-col gap-3 sm:flex-row">
             <li>
-              <ConnectBtn />
+              {address ? (
+                <>
+                  {" "}
+                  <p>{address}</p>
+                  <ConnectBtn btnText="Logout" onClick={onDisconnect} />
+                </>
+              ) : (
+                <ConnectBtn btnText="Connect" onClick={onLogin} />
+              )}
             </li>
           </ul>
         </nav>
@@ -127,7 +121,7 @@ const HeaderLg = (props: IHeaderProps) => {
 };
 
 const HeaderMdSm = (props: IHeaderProps) => {
-  const { linksList } = props;
+  const { address, onLogin, onDisconnect, linksList } = props;
   const [isOpen, setIsOpen] = useState<string | undefined>("hidden");
 
   const showMobileMenuHandler = () => {
@@ -191,7 +185,15 @@ const HeaderMdSm = (props: IHeaderProps) => {
             <nav>
               <ul className="flex flex-col gap-3 sm:flex-row">
                 <li>
-                  <ConnectBtn />
+                  {address ? (
+                    <>
+                      {" "}
+                      <p>{address}</p>
+                      <ConnectBtn btnText="Logout" onClick={onDisconnect} />
+                    </>
+                  ) : (
+                    <ConnectBtn btnText="Connect" onClick={onLogin} />
+                  )}
                 </li>
               </ul>
             </nav>

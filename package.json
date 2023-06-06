@@ -27,6 +27,7 @@
     "postbuild": "next-sitemap"
   },
   "dependencies": {
+    "bignumber.js": "^9.1.1",
     "browserslist": "^4.6.3",
     "everscale-inpage-provider": "^0.3.61",
     "everscale-standalone-client": "^2.1.19",
