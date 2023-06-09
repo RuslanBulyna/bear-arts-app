@@ -30,6 +30,14 @@ type IConnectBtn = {
   onClick: () => {};
 };
 
+const delMiddleAddrSubstr = (str: string | undefined) => {
+  const numb = 6;
+  return (
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    `${str?.substring(0, numb - 1)}...${str?.substring(str?.length - numb)}`
+  );
+};
+
 const ConnectBtn = (props: IConnectBtn) => {
   const { btnText, onClick } = props;
 
@@ -104,11 +112,11 @@ const HeaderLg = (props: IHeaderProps) => {
           <ul className="flex flex-col gap-3 sm:flex-row">
             <li>
               {address ? (
-                <>
+                <div className="flex flex-row items-center gap-3">
                   {" "}
-                  <p>{address}</p>
+                  <p>{delMiddleAddrSubstr(address)}</p>
                   <ConnectBtn btnText="Logout" onClick={onDisconnect} />
-                </>
+                </div>
               ) : (
                 <ConnectBtn btnText="Connect" onClick={onLogin} />
               )}
@@ -186,11 +194,11 @@ const HeaderMdSm = (props: IHeaderProps) => {
               <ul className="flex flex-col gap-3 sm:flex-row">
                 <li>
                   {address ? (
-                    <>
+                    <div className="flex flex-row items-center gap-3">
                       {" "}
-                      <p>{address}</p>
+                      <p>{delMiddleAddrSubstr(address)}</p>
                       <ConnectBtn btnText="Logout" onClick={onDisconnect} />
-                    </>
+                    </div>
                   ) : (
                     <ConnectBtn btnText="Connect" onClick={onLogin} />
                   )}
