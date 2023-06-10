@@ -56,7 +56,7 @@ const Auction = (props: AuctionProps) => {
     : undefined;
   // Some state variables from Auction smart contract. You can just check ABI.
   const [nftUrl, setNftUrl] = useState<string | undefined>();
-  const [currenBid, setCurrentBid] = useState<string | undefined>();
+  const [_, setCurrentBid] = useState<string | undefined>();
   const [currentWinner, setCurrentWinner] = useState<string | undefined>();
   const [endTime, setEndTime] = useState<string | undefined>();
   const [needUpdate, setNeedUpdate] = useState(false);
@@ -286,9 +286,7 @@ const Auction = (props: AuctionProps) => {
           )}
           <div className="self-center text-center">
             <div className="grid w-full items-center gap-5">
-              <h3 className="text-2xl font-bold">
-                Current Bid: {currenBid && <b>{currenBid} Venom</b>}
-              </h3>
+              <h3 className="text-2xl font-bold">Current Bid: 1 Venom</h3>
               <h6 className="text-1xl">
                 Your bid must be greater than the current bid to claim.
               </h6>
